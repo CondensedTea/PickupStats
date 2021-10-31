@@ -106,9 +106,9 @@ func NewClient(ctx context.Context, dsn, database, collection string) (*Client, 
 	if err != nil {
 		return nil, err
 	}
-	if err = conn.Ping(ctx, nil); err != nil {
-		return nil, err
-	}
+	//if err = conn.Ping(ctx, nil); err != nil {
+	//	return nil, err
+	//}
 	return &Client{
 		database:   database,
 		collection: collection,
