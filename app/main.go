@@ -4,9 +4,10 @@ import (
 	"context"
 	"log"
 
+	"github.com/condensedtea/pickupRatings/v0/pkg/api"
 	"github.com/condensedtea/pickupRatings/v0/pkg/config"
 	"github.com/condensedtea/pickupRatings/v0/pkg/db"
-	"github.com/condensedtea/pickupRatings/v0/pkg/handler"
+	"github.com/condensedtea/pickupRatings/v0/pkg/frontend"
 	"github.com/condensedtea/pickupRatings/v0/pkg/logger"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -35,7 +36,8 @@ func main() {
 		l.Fatalf("Failed to conntect to mongodb: %v", err)
 	}
 
-	handler.NewHandler(e, client)
+	api.NewHandler(e, client)
+	frontend.NewHandler(e)
 
 	e.Use(middleware.Recover())
 

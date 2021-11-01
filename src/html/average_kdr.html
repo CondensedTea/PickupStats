@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ru pickup stats</title>
+    <script src="src/js/main.js" async defer></script>
+    <script>
+        window.onload = async () => {
+            let json = await getRatingsFromAPI('/api/kdr')
+            createRatingList(json['stats'], 'kdr');
+        }
+    </script>
+</head>
+<body>
+    <h3>Pickup players rating by average Kill/Death ration</h3>
+    <div id="render"></div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package handler
+package api
 
 import (
 	"fmt"
@@ -7,6 +7,7 @@ import (
 
 	"github.com/condensedtea/pickupRatings/v0/pkg/db"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 const defaultMinGamesAmount = 10
@@ -20,9 +21,12 @@ type Handler struct {
 func NewHandler(e *echo.Echo, mongo *db.Client) {
 	h := &Handler{mongo: mongo}
 
-	e.GET("/average/dpm", h.AverageDPM)
-	e.GET("/average/kdr", h.AverageKDR)
-	e.GET("/average/hpm", h.AverageHealPerMin)
+	api := e.Group("/api")
+
+	api.Use(middleware.CORS())
+	api.GET("/dpm", h.AverageDPM)
+	api.GET("/kdr", h.AverageKDR)
+	api.GET("/hpm", h.AverageHealPerMin)
 }
 
 func (h *Handler) AverageDPM(ctx echo.Context) error {

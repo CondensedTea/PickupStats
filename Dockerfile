@@ -9,6 +9,7 @@ COPY go.sum .
 COPY Makefile .
 COPY app/ ./app
 COPY pkg/ ./pkg
+COPY src/ ./src
 
 RUN make app
 
@@ -16,6 +17,7 @@ FROM scratch
 
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /go/PickupStats/bin/app .
+COPY --from=builder /go/PickupStats/src ./src
 COPY config.yaml .
 
 EXPOSE 1323
