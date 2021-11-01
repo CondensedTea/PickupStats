@@ -14,7 +14,7 @@ app:
 
 PHONY: run
 run:
-	docker run -p 1323:1323 --rm -d --name=$(container_name) condensedtea/pickupstats:latest
+	docker run --network=host --rm -d --name=$(container_name) condensedtea/pickupstats:latest
 
 PHONY: down
 down:
