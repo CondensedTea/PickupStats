@@ -31,7 +31,7 @@ func main() {
 		l.Fatalf("Failed to parse config: %v", err)
 	}
 
-	client, err := db.NewClient(ctx, cfg.DSN, cfg.Database, cfg.Collection)
+	client, err := db.NewClient(ctx, cfg.DSN, cfg.Database, cfg.GameCollection, cfg.NameCollection)
 	if err != nil {
 		l.Fatalf("Failed to conntect to mongodb: %v", err)
 	}

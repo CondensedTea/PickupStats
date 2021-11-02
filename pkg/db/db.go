@@ -10,6 +10,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+type User struct {
+	Name string `bson:"name"`
+}
+
 const (
 	dpmAggregationTemplate = `
 	[
@@ -80,9 +84,9 @@ const (
 )
 
 type Client struct {
-	database, collection string
-	ctx                  context.Context
-	conn                 *mongo.Client
+	database, games, names string
+	ctx                    context.Context
+	conn                   *mongo.Client
 }
 
 type Player struct {
@@ -92,23 +96,29 @@ type Player struct {
 }
 
 type Result struct {
-	Player string  `json:"steamid64"`
-	DPM    float64 `json:"dpm,omitempty"`
-	KDR    float64 `json:"kdr,omitempty"`
-	HPM    float64 `json:"hpm,omitempty"`
-	Games  int32   `json:"games"`
+	PlayerName string  `json:"player_name"`
+	SteamID64  string  `json:"steamid64"`
+	DPM        float64 `json:"dpm,omitempty"`
+	KDR        float64 `json:"kdr,omitempty"`
+	HPM        float64 `json:"hpm,omitempty"`
+	Games      int32   `json:"games"`
 }
 
-func NewClient(ctx context.Context, dsn, database, collection string) (*Client, error) {
+func (r *Result) SetName(name string) {
+	r.PlayerName = name
+}
+
+func NewClient(ctx context.Context, dsn, database, gamesCollection, namesCollection string) (*Client, error) {
 	conn, err := mongo.Connect(ctx, options.Client().ApplyURI(dsn))
 	if err != nil {
 		return nil, err
 	}
 	return &Client{
-		database:   database,
-		collection: collection,
-		ctx:        ctx,
-		conn:       conn,
+		database: database,
+		games:    gamesCollection,
+		names:    namesCollection,
+		ctx:      ctx,
+		conn:     conn,
 	}, nil
 }
 
@@ -128,9 +138,14 @@ func (c *Client) GetAverageDPM(class string, minGames int) (results []Result, er
 		return nil, err
 	}
 
+	playerNames, err := c.PlayerNames()
+	if err != nil {
+		return nil, err
+	}
+
 	cur, err := c.conn.
 		Database(c.database).
-		Collection(c.collection).Aggregate(c.ctx, p, opts)
+		Collection(c.games).Aggregate(c.ctx, p, opts)
 	if err != nil {
 		return nil, err
 	}
@@ -140,9 +155,13 @@ func (c *Client) GetAverageDPM(class string, minGames int) (results []Result, er
 		if err = cur.Decode(&item); err != nil {
 			return nil, err
 		}
-		r.Player = item["_id"].(string)
+		r.SteamID64 = item["_id"].(string)
 		r.DPM = item["dpm"].(float64)
 		r.Games = item["games"].(int32)
+		r.PlayerName = playerNames[r.SteamID64]
+		if err != nil {
+			return nil, err
+		}
 		results = append(results, *r)
 	}
 	return results, nil
@@ -164,9 +183,14 @@ func (c *Client) GetAverageKDR(class string, minGames int) (results []Result, er
 		return nil, err
 	}
 
+	playerNames, err := c.PlayerNames()
+	if err != nil {
+		return nil, err
+	}
+
 	cur, err := c.conn.
 		Database(c.database).
-		Collection(c.collection).Aggregate(c.ctx, p, opts)
+		Collection(c.games).Aggregate(c.ctx, p, opts)
 	if err != nil {
 		return nil, err
 	}
@@ -176,9 +200,10 @@ func (c *Client) GetAverageKDR(class string, minGames int) (results []Result, er
 		if err = cur.Decode(&item); err != nil {
 			return nil, err
 		}
-		r.Player = item["_id"].(string)
+		r.SteamID64 = item["_id"].(string)
 		r.KDR = item["kdr"].(float64)
 		r.Games = item["games"].(int32)
+		r.PlayerName = playerNames[r.SteamID64]
 		results = append(results, *r)
 	}
 	return results, nil
@@ -197,7 +222,12 @@ func (c *Client) GetAverageHealsPerMin(minGames int) (results []Result, err erro
 
 	cur, err := c.conn.
 		Database(c.database).
-		Collection(c.collection).Aggregate(c.ctx, p, opts)
+		Collection(c.games).Aggregate(c.ctx, p, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	playerNames, err := c.PlayerNames()
 	if err != nil {
 		return nil, err
 	}
@@ -207,13 +237,38 @@ func (c *Client) GetAverageHealsPerMin(minGames int) (results []Result, err erro
 		if err = cur.Decode(&item); err != nil {
 			return nil, err
 		}
-		r.Player = item["_id"].(string)
+		r.SteamID64 = item["_id"].(string)
 		hpm := item["hpm"].(float64) // wtf?
 		r.HPM = hpm                  // Getting panic otherwise
 		r.Games = item["games"].(int32)
+		r.PlayerName = playerNames[r.SteamID64]
 		results = append(results, *r)
 	}
 	return results, nil
+}
+
+func (c *Client) PlayerNames() (map[string]string, error) {
+	users := make(map[string]string)
+
+	cur, err := c.conn.
+		Database(c.database).
+		Collection(c.names).
+		Find(c.ctx, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+
+	var item bson.M
+
+	for cur.Next(c.ctx) {
+		if err = cur.Decode(&item); err != nil {
+			return nil, err
+		}
+		steamID := item["steamid"].(string)
+		name := item["name"].(string)
+		users[steamID] = name
+	}
+	return users, nil
 }
 
 func ParseMongoPipeline(str string) (pipeline mongo.Pipeline, err error) {

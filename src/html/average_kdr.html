@@ -6,7 +6,7 @@
     <script src="src/js/main.js" async defer></script>
     <script>
         window.onload = async () => {
-            let json = await getRatingsFromAPI('/api/kdr')
+            let json = await getRatingsFromAPI('/api/kdr');
             createRatingList(json['stats'], 'kdr');
         }
     </script>

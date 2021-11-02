@@ -6,13 +6,13 @@ function createRatingList(items, type) {
         let li = document.createElement('li');
         switch (type) {
             case 'kdr':
-                li.innerHTML = `<i> ${item.steamid64} | kdr: ${item.kdr}, games: ${item.games} </i>`;
+                li.innerHTML = `${item.player_name} | kdr: ${item.kdr}, games: ${item.games}`;
                 break
             case 'dpm':
-                li.innerHTML = `<i> ${item.steamid64} | dpm: ${item.dpm}, games: ${item.games} </i>`;
+                li.innerHTML = `${item.player_name} | dpm: ${item.dpm}, games: ${item.games}`;
                 break
             case 'hpm':
-                li.innerHTML = `<i> ${item.steamid64} | hpm: ${item.hpm}, games: ${item.games} </i>`;
+                li.innerHTML = `${item.player_name} | hpm: ${item.hpm}, games: ${item.games}`;
                 break
         }
         rating.appendChild(li);

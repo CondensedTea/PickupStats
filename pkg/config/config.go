@@ -7,9 +7,10 @@ import (
 )
 
 type Config struct {
-	DSN        string `yaml:"dsn"`
-	Database   string `yaml:"database"`
-	Collection string `yaml:"collection"`
+	DSN            string `yaml:"dsn"`
+	Database       string `yaml:"database"`
+	GameCollection string `yaml:"gameCollection"`
+	NameCollection string `yaml:"nameCollection"`
 }
 
 func LoadConfig(path string) (*Config, error) {

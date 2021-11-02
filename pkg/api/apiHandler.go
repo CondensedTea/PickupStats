@@ -57,7 +57,7 @@ func (h *Handler) AverageDPM(ctx echo.Context) error {
 }
 
 func (h *Handler) AverageKDR(ctx echo.Context) error {
-	class := ctx.Param("class")
+	class := ctx.QueryParam("class")
 	minGamesRaw := ctx.QueryParam("mingames")
 
 	minGames, err := parseMinGames(minGamesRaw)
