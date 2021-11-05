@@ -1,12 +1,13 @@
 .table {
     margin: auto;
-    width: 40%;
+    width: 45%;
 }
 
-.lead {
+.header-block {
     margin: 0 auto;
     padding: 1em 0;
     text-align: center;
+    width: 45%;
 }
 
 #gamesCounter {

@@ -1,5 +1,6 @@
 function createRatingList(items, type) {
     const rating = document.createElement('tbody');
+    rating.id = "tbody"
     document.getElementById('render').appendChild(rating);
 
     items.forEach((item, index) => {
@@ -40,12 +41,27 @@ function createRatingList(items, type) {
         let cellGamesCount = tr.insertCell(-1);
         let games = document.createTextNode(item.games);
         cellGamesCount.appendChild(games)
-        // rating.appendChild(li);
     });
+}
+
+async function updateRatingList(url, type) {
+    document.getElementById("tbody").remove()
+    let playerClassElem = document.getElementById("playerClass")
+    let minGamesElem = document.getElementById("minGames")
+    let playerClass = playerClassElem.options[playerClassElem.selectedIndex].value
+    let mingames = minGamesElem.value
+
+    let params
+    if (playerClass === "Any") {
+        params = new URLSearchParams({'mingames': mingames})
+    } else {
+        params = new URLSearchParams({'class': playerClass.toLowerCase(), 'mingames': mingames})
+    }
+    let items = await getRatingsFromAPI(`${url}?${params.toString()}`)
+    createRatingList(items['stats'], type)
 }
 
 async function getRatingsFromAPI(url) {
     let resp = await fetch(url);
     return await resp.json();
 }
-
