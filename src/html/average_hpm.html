@@ -3,16 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <title>ru pickup stats</title>
+    <link href="src/css/bootstrap.min.css" rel="stylesheet">
+    <link href="src/css/styles.css" rel="stylesheet">
     <script src="src/js/main.js" async defer></script>
     <script>
         window.onload = async () => {
-            let json = await getRatingsFromAPI('/api/hpm');
+            await updateGameCount()
+            let json = await getDataFromAPI('/api/hpm');
             createRatingList(json['stats'], 'hpm');
+            document.getElementById("updBtn").onclick = function() {updateRatingList('/api/hpm', 'hpm')}
         }
     </script>
 </head>
 <body>
-    <h3>Pickup medics rating by average heals given per game</h3>
-    <div id="render"></div>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <div class="navbar-expand" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="navbar-brand" href="/"> tf2pickup.ru stats </a>
+                    <a class="nav-link" aria-current="page" href="/kdr"> KDR </a>
+                    <a class="nav-link" href="/dpm"> DPM </a>
+                    <a class="nav-link active" href="/hpm"> Heals per minute </a>
+                </div>
+            </div>
+            <div class="navbar-nav">
+                <span class="navbar-text" id="gamesCounter"> Games Counted: </span>
+            </div>
+        </div>
+    </nav>
+    <div class="main">
+        <div class="header-block">
+            <p class="lead"> Pickup medics rating by heals given per game  </p>
+            <label class="form-label"> Filter results by minimum games played or player class </label>
+            <div class="input-group">
+                <input type="text" aria-label="Min games played" value="10" class="form-control" id="minGames">
+                <button id="updBtn" class="btn btn-outline-secondary" type="button">Update</button>
+            </div>
+        </div>
+        <table class="table" id="render">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Player</th>
+                <th scope="col">DPM</th>
+                <th scope="col">Games</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
 </body>
 </html>

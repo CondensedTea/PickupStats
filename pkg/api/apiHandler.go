@@ -27,6 +27,7 @@ func NewHandler(e *echo.Echo, mongo *db.Client) {
 	api.GET("/dpm", h.AverageDPM)
 	api.GET("/kdr", h.AverageKDR)
 	api.GET("/hpm", h.AverageHealPerMin)
+	api.GET("/gamesCount", h.GamesCount)
 }
 
 func (h *Handler) AverageDPM(ctx echo.Context) error {
@@ -102,6 +103,18 @@ func (h *Handler) AverageHealPerMin(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, map[string][]db.Result{
 		"stats": results,
+	})
+}
+
+func (h *Handler) GamesCount(ctx echo.Context) error {
+	count, err := h.mongo.GetGamesCount()
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, map[string]string{
+			"error": err.Error(),
+		})
+	}
+	return ctx.JSON(http.StatusOK, map[string]int64{
+		"count": count / 12,
 	})
 }
 

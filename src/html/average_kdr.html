@@ -3,16 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <title>ru pickup stats</title>
+    <link href="src/css/bootstrap.min.css" rel="stylesheet">
+    <link href="src/css/styles.css" rel="stylesheet">
     <script src="src/js/main.js" async defer></script>
     <script>
         window.onload = async () => {
-            let json = await getRatingsFromAPI('/api/kdr');
+            await updateGameCount()
+            let json = await getDataFromAPI('/api/kdr');
             createRatingList(json['stats'], 'kdr');
+            document.getElementById("updBtn").onclick = function() {updateRatingList('/api/kdr', 'kdr')}
         }
     </script>
 </head>
-<body>
-    <h3>Pickup players rating by average Kill/Death ration</h3>
-    <div id="render"></div>
-</body>
+    <body>
+        <nav class="navbar navbar-dark bg-dark">
+            <div class="container-fluid">
+                <div class="navbar-expand" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="navbar-brand" href="/"> tf2pickup.ru stats </a>
+                        <a class="nav-link active" aria-current="page" href="/kdr"> KDR </a>
+                        <a class="nav-link" href="/dpm"> DPM </a>
+                        <a class="nav-link" href="/hpm"> Heals per minute </a>
+                    </div>
+                </div>
+                <div class="navbar-nav">
+                    <span class="navbar-text" id="gamesCounter"> Games Counted: </span>
+                </div>
+            </div>
+        </nav>
+        <div class="main">
+            <div class="header-block">
+                <p class="lead"> Pickup players rating by average K/D ratio </p>
+                <label class="form-label"> Filter results by minimum games played or player class </label>
+                <div class="input-group">
+                    <input type="text" aria-label="Min games played" value="10" class="form-control" id="minGames">
+                    <select class="form-select" id="playerClass">
+                        <option selected> Any </option>
+                        <option> Scout </option>
+                        <option> Soldier </option>
+                        <option> Demoman </option>
+                        <option> Medic </option>
+                    </select>
+                    <button id="updBtn" class="btn btn-outline-secondary" type="button">Update</button>
+                </div>
+            </div>
+            <table class="table" id="render">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Player</th>
+                    <th scope="col">DPM</th>
+                    <th scope="col">Games</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </body>
 </html>

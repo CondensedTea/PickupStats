@@ -271,6 +271,13 @@ func (c *Client) PlayerNames() (map[string]string, error) {
 	return users, nil
 }
 
+func (c *Client) GetGamesCount() (int64, error) {
+	return c.conn.
+		Database(c.database).
+		Collection(c.games).
+		CountDocuments(c.ctx, bson.D{})
+}
+
 func ParseMongoPipeline(str string) (pipeline mongo.Pipeline, err error) {
 	str = strings.TrimSpace(str)
 	if strings.Index(str, "[") != 0 {

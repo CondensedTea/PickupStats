@@ -21,23 +21,21 @@ function createRatingList(items, type) {
 
         switch (type) {
             case 'kdr':
-                //
-                //
-                // let cellKDR = tr.insertCell(0);
-                // cellName.innerHTML = item.kdr;
-                //
-                // // li.innerHTML = `${} | kdr: ${item.kdr}, games: ${item.games}`;
-                // break
+                let cellKDR = tr.insertCell(-1);
+                let kdr = document.createTextNode(item.kdr)
+                cellKDR.appendChild(kdr)
+                break
             case 'dpm':
                 let cellDPM = tr.insertCell(-1);
                 let dpm = document.createTextNode(item.dpm)
                 cellDPM.appendChild(dpm)
                 break
             case 'hpm':
-                // li.innerHTML = `${item.player_name} | hpm: ${item.hpm}, games: ${item.games}`;
-                // break
+                let cellHPM = tr.insertCell(-1);
+                let hpm = document.createTextNode(item.hpm)
+                cellHPM.appendChild(hpm)
+                break
         }
-
         let cellGamesCount = tr.insertCell(-1);
         let games = document.createTextNode(item.games);
         cellGamesCount.appendChild(games)
@@ -47,21 +45,35 @@ function createRatingList(items, type) {
 async function updateRatingList(url, type) {
     document.getElementById("tbody").remove()
     let playerClassElem = document.getElementById("playerClass")
+
+    let playerClass
+    if (type === "hpm") {
+        playerClass = ""
+    } else {
+        let playerClass = playerClassElem.options[playerClassElem.selectedIndex].value
+
+    }
     let minGamesElem = document.getElementById("minGames")
-    let playerClass = playerClassElem.options[playerClassElem.selectedIndex].value
     let mingames = minGamesElem.value
 
     let params
-    if (playerClass === "Any") {
+    if (playerClass === "Any" || playerClass === "") {
         params = new URLSearchParams({'mingames': mingames})
     } else {
         params = new URLSearchParams({'class': playerClass.toLowerCase(), 'mingames': mingames})
     }
-    let items = await getRatingsFromAPI(`${url}?${params.toString()}`)
+    let items = await getDataFromAPI(`${url}?${params.toString()}`)
     createRatingList(items['stats'], type)
 }
 
-async function getRatingsFromAPI(url) {
+async function updateGameCount() {
+    let data = await getDataFromAPI('/api/gamesCount')
+    let elem = document.getElementById("gamesCounter")
+
+    elem.innerText += " " + data["count"]
+}
+
+async function getDataFromAPI(url) {
     let resp = await fetch(url);
     return await resp.json();
 }
