@@ -11,7 +11,7 @@ import (
 )
 
 type User struct {
-	Name string `bson:"name"`
+	Name string `bson:"Name"`
 }
 
 const (
@@ -86,17 +86,17 @@ const (
 type Client struct {
 	database, games, names string
 	ctx                    context.Context
-	conn                   *mongo.Client
+	Conn                   *mongo.Client
 }
 
 type Player struct {
-	pickupID   string
-	steamID    string
-	GamesCount int
+	Name   string `json:"Name"`
+	Avatar string `json:"Avatar"`
 }
 
 type Result struct {
 	PlayerName string  `json:"player_name"`
+	Avatar     string  `json:"avatar"`
 	SteamID64  string  `json:"steamid64"`
 	DPM        float64 `json:"dpm,omitempty"`
 	KDR        float64 `json:"kdr,omitempty"`
@@ -118,7 +118,7 @@ func NewClient(ctx context.Context, dsn, database, gamesCollection, namesCollect
 		games:    gamesCollection,
 		names:    namesCollection,
 		ctx:      ctx,
-		conn:     conn,
+		Conn:     conn,
 	}, nil
 }
 
@@ -143,7 +143,7 @@ func (c *Client) GetAverageDPM(class string, minGames int) (results []Result, er
 		return nil, err
 	}
 
-	cur, err := c.conn.
+	cur, err := c.Conn.
 		Database(c.database).
 		Collection(c.games).Aggregate(c.ctx, p, opts)
 	if err != nil {
@@ -158,7 +158,8 @@ func (c *Client) GetAverageDPM(class string, minGames int) (results []Result, er
 		r.SteamID64 = item["_id"].(string)
 		r.DPM = item["dpm"].(float64)
 		r.Games = item["games"].(int32)
-		r.PlayerName = playerNames[r.SteamID64]
+		r.PlayerName = playerNames[r.SteamID64].Name
+		r.Avatar = playerNames[r.SteamID64].Avatar
 		if err != nil {
 			return nil, err
 		}
@@ -188,7 +189,7 @@ func (c *Client) GetAverageKDR(class string, minGames int) (results []Result, er
 		return nil, err
 	}
 
-	cur, err := c.conn.
+	cur, err := c.Conn.
 		Database(c.database).
 		Collection(c.games).Aggregate(c.ctx, p, opts)
 	if err != nil {
@@ -203,7 +204,8 @@ func (c *Client) GetAverageKDR(class string, minGames int) (results []Result, er
 		r.SteamID64 = item["_id"].(string)
 		r.KDR = item["kdr"].(float64)
 		r.Games = item["games"].(int32)
-		r.PlayerName = playerNames[r.SteamID64]
+		r.PlayerName = playerNames[r.SteamID64].Name
+		r.Avatar = playerNames[r.SteamID64].Avatar
 		results = append(results, *r)
 	}
 	return results, nil
@@ -220,7 +222,7 @@ func (c *Client) GetAverageHealsPerMin(minGames int) (results []Result, err erro
 		return nil, err
 	}
 
-	cur, err := c.conn.
+	cur, err := c.Conn.
 		Database(c.database).
 		Collection(c.games).Aggregate(c.ctx, p, opts)
 	if err != nil {
@@ -241,16 +243,17 @@ func (c *Client) GetAverageHealsPerMin(minGames int) (results []Result, err erro
 		hpm := item["hpm"].(float64) // wtf?
 		r.HPM = hpm                  // Getting panic otherwise
 		r.Games = item["games"].(int32)
-		r.PlayerName = playerNames[r.SteamID64]
+		r.PlayerName = playerNames[r.SteamID64].Name
+		r.Avatar = playerNames[r.SteamID64].Avatar
 		results = append(results, *r)
 	}
 	return results, nil
 }
 
-func (c *Client) PlayerNames() (map[string]string, error) {
-	users := make(map[string]string)
+func (c *Client) PlayerNames() (map[string]Player, error) {
+	users := make(map[string]Player)
 
-	cur, err := c.conn.
+	cur, err := c.Conn.
 		Database(c.database).
 		Collection(c.names).
 		Find(c.ctx, bson.M{})
@@ -264,15 +267,21 @@ func (c *Client) PlayerNames() (map[string]string, error) {
 		if err = cur.Decode(&item); err != nil {
 			return nil, err
 		}
-		steamID := item["steamid"].(string)
+		steamID := item["steam_id"].(string)
 		name := item["name"].(string)
-		users[steamID] = name
+		//fmt.Printf("%#v", item["avatar"])
+		avatar := item["avatar"].(bson.M)
+		small := avatar["small"].(string)
+		users[steamID] = Player{
+			Name:   name,
+			Avatar: small,
+		}
 	}
 	return users, nil
 }
 
 func (c *Client) GetGamesCount() (int64, error) {
-	return c.conn.
+	return c.Conn.
 		Database(c.database).
 		Collection(c.games).
 		CountDocuments(c.ctx, bson.D{})

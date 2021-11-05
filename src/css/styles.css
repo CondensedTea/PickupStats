@@ -10,6 +10,22 @@
     width: 45%;
 }
 
+img {
+    margin: 0 1em 0 0;
+}
+
+.first {
+    border: 3px dotted gold;
+}
+
+.second {
+    border: 2px dotted silver;
+}
+
+.third {
+    border: 2px dotted #cd7f32;
+}
+
 #timeSinceLastGame {
     font-size: .8em;
 }

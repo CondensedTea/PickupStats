@@ -13,7 +13,21 @@ function createRatingList(items, type) {
         tr.appendChild(th)
 
         let cellName = tr.insertCell(-1);
-        // let name = document.createTextNode(item.player_name);
+
+        let avatar = document.createElement('img')
+        avatar.src = item.avatar
+        avatar.id = "avatar"
+        if (index === 0) {
+            avatar.className = "first"
+        }
+        if (index === 1) {
+            avatar.className = "second"
+        }
+        if (index === 2) {
+            avatar.className = "third"
+        }
+        cellName.appendChild(avatar)
+
         let a = document.createElement('a')
         a.text = (item?.player_name === "") ? item.steamid64 : item.player_name;
         a.href = "https://steamcommunity.com/profiles/" + item.steamid64
@@ -50,8 +64,7 @@ async function updateRatingList(url, type) {
     if (type === "hpm") {
         playerClass = ""
     } else {
-        let playerClass = playerClassElem.options[playerClassElem.selectedIndex].value
-
+        playerClass = playerClassElem.options[playerClassElem.selectedIndex].value
     }
     let minGamesElem = document.getElementById("minGames")
     let mingames = minGamesElem.value
