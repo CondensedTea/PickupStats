@@ -269,7 +269,6 @@ func (c *Client) PlayerNames() (map[string]Player, error) {
 		}
 		steamID := item["steam_id"].(string)
 		name := item["name"].(string)
-		//fmt.Printf("%#v", item["avatar"])
 		avatar := item["avatar"].(bson.M)
 		small := avatar["small"].(string)
 		users[steamID] = Player{

@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ru pickup stats</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>tf2pickup.ru stats</title>
     <link href="src/css/bootstrap.min.css" rel="stylesheet">
     <link href="src/css/styles.css" rel="stylesheet">
     <script src="src/js/main.js" async defer></script>
@@ -33,11 +34,11 @@
     </nav>
     <div class="main">
         <div class="header-block">
-            <p class="lead"> Medics rating by heals given per game  </p>
+            <p class="lead"> Medics rating by heals given per minute </p>
             <label class="form-label"> Filter results by minimum games played or player class </label>
             <div class="input-group">
                 <input type="text" aria-label="Min games played" value="10" class="form-control" id="minGames">
-                <button id="updBtn" class="btn btn-outline-secondary" type="button">Update</button>
+                <button id="updBtn" class="btn btn-outline-secondary" type="button">Reload</button>
             </div>
         </div>
         <table class="table" id="render">
