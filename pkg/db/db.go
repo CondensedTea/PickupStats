@@ -95,13 +95,13 @@ type Player struct {
 }
 
 type Result struct {
-	PlayerName string  `json:"player_name"`
-	Avatar     string  `json:"avatar"`
-	SteamID64  string  `json:"steamid64"`
-	DPM        float64 `json:"dpm,omitempty"`
-	KDR        float64 `json:"kdr,omitempty"`
-	HPM        float64 `json:"hpm,omitempty"`
-	Games      int32   `json:"games"`
+	PlayerName string   `json:"player_name"`
+	Avatar     string   `json:"avatar"`
+	SteamID64  string   `json:"steamid64"`
+	DPM        *float64 `json:"dpm,omitempty"`
+	KDR        *float64 `json:"kdr,omitempty"`
+	HPM        *float64 `json:"hpm,omitempty"`
+	Games      int32    `json:"games"`
 }
 
 func (r *Result) SetName(name string) {
@@ -156,7 +156,8 @@ func (c *Client) GetAverageDPM(class string, minGames int) (results []Result, er
 			return nil, err
 		}
 		r.SteamID64 = item["_id"].(string)
-		r.DPM = item["dpm"].(float64)
+		dpm := item["dpm"].(float64)
+		r.DPM = &dpm
 		r.Games = item["games"].(int32)
 		r.PlayerName = playerNames[r.SteamID64].Name
 		r.Avatar = playerNames[r.SteamID64].Avatar
@@ -202,7 +203,8 @@ func (c *Client) GetAverageKDR(class string, minGames int) (results []Result, er
 			return nil, err
 		}
 		r.SteamID64 = item["_id"].(string)
-		r.KDR = item["kdr"].(float64)
+		kdr := item["kdr"].(float64)
+		r.KDR = &kdr
 		r.Games = item["games"].(int32)
 		r.PlayerName = playerNames[r.SteamID64].Name
 		r.Avatar = playerNames[r.SteamID64].Avatar
@@ -240,8 +242,8 @@ func (c *Client) GetAverageHealsPerMin(minGames int) (results []Result, err erro
 			return nil, err
 		}
 		r.SteamID64 = item["_id"].(string)
-		hpm := item["hpm"].(float64) // wtf?
-		r.HPM = hpm                  // Getting panic otherwise
+		hpm := item["hpm"].(float64)
+		r.HPM = &hpm
 		r.Games = item["games"].(int32)
 		r.PlayerName = playerNames[r.SteamID64].Name
 		r.Avatar = playerNames[r.SteamID64].Avatar
