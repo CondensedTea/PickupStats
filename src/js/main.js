@@ -70,7 +70,7 @@ async function updateRatingList(url, type) {
     let mingames = minGamesElem.value
 
     let params
-    if (playerClass === "Any" || playerClass === "") {
+    if (playerClass === "Any fight class" || playerClass === "") {
         params = new URLSearchParams({'mingames': mingames})
     } else {
         params = new URLSearchParams({'class': playerClass.toLowerCase(), 'mingames': mingames})

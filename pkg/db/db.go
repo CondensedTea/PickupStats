@@ -34,7 +34,7 @@ const (
 				"games": "$count_games"
 			}
 		},
-		{"$sort": {"dpm": -1}},
+		{"$sort": {"dpm": -1, "games": -1}},
 		{"$match": {"games": {"$gt": %d}}}
 	]`
 	kdrAggregationTemplate = `
@@ -56,7 +56,7 @@ const (
 				"games": "$count_games"
 			}
 		},
-		{"$sort": {"kdr": -1}},
+		{"$sort": {"kdr": -1, "games": -1}},
 		{"$match": {"games": {"$gt": %d}}}
 	]`
 	healsPerMinAggregationTemplate = `
@@ -78,7 +78,7 @@ const (
 				"games": "$count_games"
 			}
 		},
-		{"$sort": {"hpm": -1}},
+		{"$sort": {"hpm": -1, "games": -1}},
 		{"$match": {"games": {"$gt": %d}}}
 	]`
 )
