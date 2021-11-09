@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/condensedtea/pickupRatings/v0/pkg/db"
+	"github.com/condensedtea/PickupStats/v0/pkg/db"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -13,6 +13,14 @@ import (
 const defaultMinGamesAmount = 10
 
 var ErrBadClass = fmt.Errorf("invalid player class: must be scout, soldier, demoman or medic")
+
+type Response struct {
+	Stats []db.Result `json:"stats"`
+}
+
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
 
 type Handler struct {
 	mongo *db.Client
@@ -30,31 +38,34 @@ func NewHandler(e *echo.Echo, mongo *db.Client) {
 	api.GET("/gamesCount", h.GamesCount)
 }
 
+// AverageDPM godoc
+// @Summary Player rating by average DPM.
+// @Tags Rating
+// @Accept */*
+// @Produce json
+// @Success 200 {object} Response
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Param class path string false "Player class"
+// @Param mingames path int false "Minimum games played"
+// @Router /dpm [get]
 func (h *Handler) AverageDPM(ctx echo.Context) error {
 	class := ctx.QueryParam("class")
 	minGamesRaw := ctx.QueryParam("mingames")
 
 	minGames, err := parseMinGames(minGamesRaw)
 	if err != nil {
-		return ctx.JSON(http.StatusBadRequest, map[string]string{
-			"error": err.Error(),
-		})
+		return ctx.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
 	}
 	if err := validateClass(class); err != nil {
-		return ctx.JSON(http.StatusBadRequest, map[string]string{
-			"error": err.Error(),
-		})
+		return ctx.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
 	}
 
 	results, err := h.mongo.GetAverageDPM(class, minGames)
 	if err != nil {
-		return ctx.JSON(http.StatusInternalServerError, map[string]string{
-			"error": err.Error(),
-		})
+		return ctx.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
 	}
-	return ctx.JSON(http.StatusOK, map[string][]db.Result{
-		"stats": results,
-	})
+	return ctx.JSON(http.StatusOK, Response{Stats: results})
 }
 
 func (h *Handler) AverageKDR(ctx echo.Context) error {

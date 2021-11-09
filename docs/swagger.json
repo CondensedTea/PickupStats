@@ -1,0 +1,110 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API for LogWatcher stats.",
+        "title": "Pickup Stats API",
+        "contact": {
+            "name": "Tea",
+            "email": "alex@tyshkevich.ru"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/api",
+    "paths": {
+        "/dpm": {
+            "get": {
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rating"
+                ],
+                "summary": "Player rating by average DPM.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Player class",
+                        "name": "class",
+                        "in": "path"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Minimum games played",
+                        "name": "mingames",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "api.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.Response": {
+            "type": "object",
+            "properties": {
+                "stats": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/db.Result"
+                    }
+                }
+            }
+        },
+        "db.Result": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "dpm": {
+                    "type": "number"
+                },
+                "games": {
+                    "type": "integer"
+                },
+                "hpm": {
+                    "type": "number"
+                },
+                "kdr": {
+                    "type": "number"
+                },
+                "player_name": {
+                    "type": "string"
+                },
+                "steamid64": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

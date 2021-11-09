@@ -1,0 +1,71 @@
+basePath: /api
+definitions:
+  api.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  api.Response:
+    properties:
+      stats:
+        items:
+          $ref: '#/definitions/db.Result'
+        type: array
+    type: object
+  db.Result:
+    properties:
+      avatar:
+        type: string
+      dpm:
+        type: number
+      games:
+        type: integer
+      hpm:
+        type: number
+      kdr:
+        type: number
+      player_name:
+        type: string
+      steamid64:
+        type: string
+    type: object
+info:
+  contact:
+    email: alex@tyshkevich.ru
+    name: Tea
+  description: API for LogWatcher stats.
+  title: Pickup Stats API
+  version: "1.0"
+paths:
+  /dpm:
+    get:
+      consumes:
+      - '*/*'
+      parameters:
+      - description: Player class
+        in: path
+        name: class
+        type: string
+      - description: Minimum games played
+        in: path
+        name: mingames
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Player rating by average DPM.
+      tags:
+      - Rating
+swagger: "2.0"

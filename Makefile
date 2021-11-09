@@ -19,3 +19,7 @@ run:
 PHONY: down
 down:
 	docker kill $(container_name)
+
+.PHONY: docs
+docs:
+	swag init -g main.go -d app/,pkg/api,pkg/db --output docs/

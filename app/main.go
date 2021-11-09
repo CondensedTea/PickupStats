@@ -4,19 +4,30 @@ import (
 	"context"
 	"log"
 
-	"github.com/condensedtea/pickupRatings/v0/pkg/api"
-	"github.com/condensedtea/pickupRatings/v0/pkg/config"
-	"github.com/condensedtea/pickupRatings/v0/pkg/db"
-	"github.com/condensedtea/pickupRatings/v0/pkg/frontend"
-	"github.com/condensedtea/pickupRatings/v0/pkg/logger"
+	"github.com/condensedtea/PickupStats/v0/pkg/api"
+	"github.com/condensedtea/PickupStats/v0/pkg/config"
+	"github.com/condensedtea/PickupStats/v0/pkg/db"
+	"github.com/condensedtea/PickupStats/v0/pkg/frontend"
+	"github.com/condensedtea/PickupStats/v0/pkg/logger"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	echoSwagger "github.com/swaggo/echo-swagger"
+
+	_ "github.com/condensedtea/PickupStats/v0/docs"
 )
 
 const configPath = "config.yaml"
 
 const loglevel = "debug"
 
+// @title Pickup Stats API
+// @version 1.0
+// @description API for LogWatcher stats.
+
+// @contact.name Tea
+// @contact.email alex@tyshkevich.ru
+
+// @BasePath /api
 func main() {
 	e := echo.New()
 	ctx := context.Background()
@@ -40,6 +51,7 @@ func main() {
 	frontend.NewHandler(e)
 
 	e.Use(middleware.Recover())
+	e.GET("/docs/*", echoSwagger.WrapHandler)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
