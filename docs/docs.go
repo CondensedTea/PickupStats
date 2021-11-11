@@ -17,10 +17,7 @@ var doc = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {
-            "name": "Tea",
-            "email": "alex@tyshkevich.ru"
-        },
+        "contact": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -38,6 +35,96 @@ var doc = `{
                     "Rating"
                 ],
                 "summary": "Player rating by average DPM.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Player class",
+                        "name": "class",
+                        "in": "path"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Minimum games played",
+                        "name": "mingames",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/hpm": {
+            "get": {
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rating"
+                ],
+                "summary": "Medics rating by average heals given per minute.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Minimum games played",
+                        "name": "mingames",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/kdr": {
+            "get": {
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rating"
+                ],
+                "summary": "Player rating by average KDR.",
                 "parameters": [
                     {
                         "type": "string",
@@ -135,12 +222,12 @@ type swaggerInfo struct {
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
-	Version:     "1.0",
+	Version:     "",
 	Host:        "",
 	BasePath:    "/api",
 	Schemes:     []string{},
 	Title:       "Pickup Stats API",
-	Description: "API for LogWatcher stats.",
+	Description: "API for pickup stats collected with LogWatcher.",
 }
 
 type s struct{}

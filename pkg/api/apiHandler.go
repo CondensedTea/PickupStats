@@ -40,7 +40,7 @@ func NewHandler(e *echo.Echo, mongo *db.Client) {
 
 // AverageDPM godoc
 // @Summary Player rating by average DPM.
-// @Tags Rating
+// @Tags Ratings
 // @Accept */*
 // @Produce json
 // @Success 200 {object} Response
@@ -68,6 +68,17 @@ func (h *Handler) AverageDPM(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, Response{Stats: results})
 }
 
+// AverageKDR godoc
+// @Summary Player rating by average KDR.
+// @Tags Ratings
+// @Accept */*
+// @Produce json
+// @Success 200 {object} Response
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Param class path string false "Player class"
+// @Param mingames path int false "Minimum games played"
+// @Router /kdr [get]
 func (h *Handler) AverageKDR(ctx echo.Context) error {
 	class := ctx.QueryParam("class")
 	minGamesRaw := ctx.QueryParam("mingames")
@@ -96,6 +107,16 @@ func (h *Handler) AverageKDR(ctx echo.Context) error {
 	})
 }
 
+// AverageHealPerMin godoc
+// @Summary Medics rating by average heals given per minute.
+// @Tags Ratings
+// @Accept */*
+// @Produce json
+// @Success 200 {object} Response
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Param mingames path int false "Minimum games played"
+// @Router /hpm [get]
 func (h *Handler) AverageHealPerMin(ctx echo.Context) error {
 	minGamesRaw := ctx.QueryParam("mingames")
 

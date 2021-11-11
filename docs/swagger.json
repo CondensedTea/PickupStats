@@ -1,13 +1,9 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "API for LogWatcher stats.",
+        "description": "API for pickup stats collected with LogWatcher.",
         "title": "Pickup Stats API",
-        "contact": {
-            "name": "Tea",
-            "email": "alex@tyshkevich.ru"
-        },
-        "version": "1.0"
+        "contact": {}
     },
     "basePath": "/api",
     "paths": {
@@ -23,6 +19,96 @@
                     "Rating"
                 ],
                 "summary": "Player rating by average DPM.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Player class",
+                        "name": "class",
+                        "in": "path"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Minimum games played",
+                        "name": "mingames",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/hpm": {
+            "get": {
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rating"
+                ],
+                "summary": "Medics rating by average heals given per minute.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Minimum games played",
+                        "name": "mingames",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/kdr": {
+            "get": {
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rating"
+                ],
+                "summary": "Player rating by average KDR.",
                 "parameters": [
                     {
                         "type": "string",

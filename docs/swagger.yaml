@@ -30,12 +30,9 @@ definitions:
         type: string
     type: object
 info:
-  contact:
-    email: alex@tyshkevich.ru
-    name: Tea
-  description: API for LogWatcher stats.
+  contact: {}
+  description: API for pickup stats collected with LogWatcher.
   title: Pickup Stats API
-  version: "1.0"
 paths:
   /dpm:
     get:
@@ -66,6 +63,64 @@ paths:
           schema:
             $ref: '#/definitions/api.ErrorResponse'
       summary: Player rating by average DPM.
+      tags:
+      - Rating
+  /hpm:
+    get:
+      consumes:
+      - '*/*'
+      parameters:
+      - description: Minimum games played
+        in: path
+        name: mingames
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Medics rating by average heals given per minute.
+      tags:
+      - Rating
+  /kdr:
+    get:
+      consumes:
+      - '*/*'
+      parameters:
+      - description: Player class
+        in: path
+        name: class
+        type: string
+      - description: Minimum games played
+        in: path
+        name: mingames
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Player rating by average KDR.
       tags:
       - Rating
 swagger: "2.0"

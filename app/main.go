@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 
+	"github.com/condensedtea/PickupStats/v0/docs"
 	"github.com/condensedtea/PickupStats/v0/pkg/api"
 	"github.com/condensedtea/PickupStats/v0/pkg/config"
 	"github.com/condensedtea/PickupStats/v0/pkg/db"
@@ -20,12 +21,10 @@ const configPath = "config.yaml"
 
 const loglevel = "debug"
 
-// @title Pickup Stats API
-// @version 1.0
-// @description API for LogWatcher stats.
+var Version = "dev"
 
-// @contact.name Tea
-// @contact.email alex@tyshkevich.ru
+// @title Pickup Stats API
+// @description API for pickup stats collected with LogWatcher.
 
 // @BasePath /api
 func main() {
@@ -50,6 +49,7 @@ func main() {
 	api.NewHandler(e, client)
 	frontend.NewHandler(e)
 
+	docs.SwaggerInfo.Version = Version
 	e.Use(middleware.Recover())
 	e.GET("/docs/*", echoSwagger.WrapHandler)
 

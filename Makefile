@@ -3,6 +3,8 @@ LOCAL_BIN ?=./bin
 version=1.0.0
 container_name=PickupStats
 
+LDFLAGS = "-X 'main.Version=$(version)'"
+
 .PHONY: build
 build:
 	docker build -t condensedtea/pickupstats:latest -t condensedtea/pickupstats:$(version) .
@@ -10,7 +12,7 @@ build:
 
 .PHONY: app
 app:
-	CGO_ENABLED=0 go build -o "$(LOCAL_BIN)/app" ./app
+	CGO_ENABLED=0 go build -ldflags=$(LDFLAGS) -o "$(LOCAL_BIN)/app" ./app
 
 PHONY: run
 run:

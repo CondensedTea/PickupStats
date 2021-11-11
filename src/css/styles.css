@@ -10,7 +10,7 @@
     width: 50%;
 }
 
-img {
+#avatar {
     margin: 0 1em 0 0;
 }
 
@@ -28,4 +28,14 @@ tr {
 
 .third {
     border: 2px solid #cd7f32;
+}
+
+.github-logo-link {
+    margin: .25rem .5rem;
+}
+
+.github-logo-img {
+    width: 32px;
+    height: 32px;
+    align-items: center;
 }
