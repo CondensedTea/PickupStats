@@ -9,8 +9,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/condensedtea/pickupRatings/v0/pkg/config"
-	"github.com/condensedtea/pickupRatings/v0/pkg/db"
+	"github.com/condensedtea/PickupStats/pkg/config"
+	"github.com/condensedtea/PickupStats/pkg/db"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -35,7 +35,7 @@ type PickupPlayer struct {
 }
 
 func main() {
-	configPath := flag.String("config", "../config.yaml", "path to config file")
+	configPath := flag.String("config", "config.yaml", "path to config file")
 	flag.Parse()
 
 	ctx := context.Background()
