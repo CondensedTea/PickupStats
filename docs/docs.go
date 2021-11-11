@@ -32,7 +32,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Rating"
+                    "Ratings"
                 ],
                 "summary": "Player rating by average DPM.",
                 "parameters": [
@@ -71,6 +71,34 @@ var doc = `{
                 }
             }
         },
+        "/gamesCount": {
+            "get": {
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Util"
+                ],
+                "summary": "Games count in mongodb.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/hpm": {
             "get": {
                 "consumes": [
@@ -80,7 +108,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Rating"
+                    "Ratings"
                 ],
                 "summary": "Medics rating by average heals given per minute.",
                 "parameters": [
@@ -122,7 +150,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Rating"
+                    "Ratings"
                 ],
                 "summary": "Player rating by average KDR.",
                 "parameters": [

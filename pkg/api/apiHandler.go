@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"PickupStats/pkg/db"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -138,6 +139,14 @@ func (h *Handler) AverageHealPerMin(ctx echo.Context) error {
 	})
 }
 
+// GamesCount godoc
+// @Summary Games count in mongodb.
+// @Tags Util
+// @Accept */*
+// @Produce json
+// @Success 200 {object} Response
+// @Failure 500 {object} ErrorResponse
+// @Router /gamesCount [get]
 func (h *Handler) GamesCount(ctx echo.Context) error {
 	count, err := h.mongo.GetGamesCount()
 	if err != nil {

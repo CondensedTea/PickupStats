@@ -64,7 +64,25 @@ paths:
             $ref: '#/definitions/api.ErrorResponse'
       summary: Player rating by average DPM.
       tags:
-      - Rating
+      - Ratings
+  /gamesCount:
+    get:
+      consumes:
+      - '*/*'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Games count in mongodb.
+      tags:
+      - Util
   /hpm:
     get:
       consumes:
@@ -91,7 +109,7 @@ paths:
             $ref: '#/definitions/api.ErrorResponse'
       summary: Medics rating by average heals given per minute.
       tags:
-      - Rating
+      - Ratings
   /kdr:
     get:
       consumes:
@@ -122,5 +140,5 @@ paths:
             $ref: '#/definitions/api.ErrorResponse'
       summary: Player rating by average KDR.
       tags:
-      - Rating
+      - Ratings
 swagger: "2.0"
