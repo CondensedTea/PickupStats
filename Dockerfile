@@ -8,6 +8,7 @@ COPY go.mod .
 COPY go.sum .
 COPY Makefile .
 COPY app/ ./app
+COPY docs/ ./docs
 COPY pkg/ ./pkg
 COPY src/ ./src
 

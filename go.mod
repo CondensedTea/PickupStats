@@ -1,4 +1,4 @@
-module github.com/condensedtea/PickupStats
+module PickupStats
 
 go 1.17
 

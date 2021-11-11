@@ -4,17 +4,17 @@ import (
 	"context"
 	"log"
 
-	"github.com/condensedtea/PickupStats/docs"
-	"github.com/condensedtea/PickupStats/pkg/api"
-	"github.com/condensedtea/PickupStats/pkg/config"
-	"github.com/condensedtea/PickupStats/pkg/db"
-	"github.com/condensedtea/PickupStats/pkg/frontend"
-	"github.com/condensedtea/PickupStats/pkg/logger"
+	"PickupStats/docs"
+	"PickupStats/pkg/api"
+	"PickupStats/pkg/config"
+	"PickupStats/pkg/db"
+	"PickupStats/pkg/frontend"
+	"PickupStats/pkg/logger"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
 
-	_ "github.com/condensedtea/PickupStats/docs"
+	_ "PickupStats/docs"
 )
 
 const configPath = "config.yaml"

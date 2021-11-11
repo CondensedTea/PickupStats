@@ -9,8 +9,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/condensedtea/PickupStats/pkg/config"
-	"github.com/condensedtea/PickupStats/pkg/db"
+	"PickupStats/pkg/config"
+	"PickupStats/pkg/db"
+
 	"go.mongodb.org/mongo-driver/bson"
 )
 
