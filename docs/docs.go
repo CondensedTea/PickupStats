@@ -87,7 +87,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/api.GamesCount"
                         }
                     },
                     "500": {
@@ -196,6 +196,14 @@ var doc = `{
             "properties": {
                 "error": {
                     "type": "string"
+                }
+            }
+        },
+        "api.GamesCount": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
                 }
             }
         },

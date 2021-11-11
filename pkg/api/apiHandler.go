@@ -15,6 +15,10 @@ const defaultMinGamesAmount = 10
 
 var ErrBadClass = fmt.Errorf("invalid player class: must be scout, soldier, demoman or medic")
 
+type GamesCount struct {
+	Count int64 `json:"count"`
+}
+
 type Response struct {
 	Stats []db.Result `json:"stats"`
 }
@@ -144,15 +148,13 @@ func (h *Handler) AverageHealPerMin(ctx echo.Context) error {
 // @Tags Util
 // @Accept */*
 // @Produce json
-// @Success 200 {object} Response
+// @Success 200 {object} GamesCount
 // @Failure 500 {object} ErrorResponse
 // @Router /gamesCount [get]
 func (h *Handler) GamesCount(ctx echo.Context) error {
 	count, err := h.mongo.GetGamesCount()
 	if err != nil {
-		return ctx.JSON(http.StatusInternalServerError, map[string]string{
-			"error": err.Error(),
-		})
+		return ctx.JSON(http.StatusInternalServerError, GamesCount{Count: count / 12})
 	}
 	return ctx.JSON(http.StatusOK, map[string]int64{
 		"count": count / 12,

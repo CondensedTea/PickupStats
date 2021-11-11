@@ -5,6 +5,11 @@ definitions:
       error:
         type: string
     type: object
+  api.GamesCount:
+    properties:
+      count:
+        type: integer
+    type: object
   api.Response:
     properties:
       stats:
@@ -75,7 +80,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.Response'
+            $ref: '#/definitions/api.GamesCount'
         "500":
           description: Internal Server Error
           schema:
